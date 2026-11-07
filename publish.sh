@@ -20,6 +20,7 @@ if [ -z "${GITHUB_TOKEN:-}" ]; then
   echo "  PowerShell: \$env:GITHUB_TOKEN='ghp_xxx'; bash .\\publish.sh"
   exit 1
 fi
+export GITHUB_TOKEN
 
 api() {
   curl -sS -H "Authorization: Bearer ${GITHUB_TOKEN}" \
@@ -45,11 +46,18 @@ case "$CODE" in
   *)   echo "   ! 建库返回 HTTP ${CODE}，继续尝试推送" ;;
 esac
 
-# 3) 推送（令牌只在本次命令内展开，不写入 .git/config）
+# 3) 推送：令牌由 credential helper 从环境变量注入，
+#    不出现在 URL、.git/config 或 git 的报错信息里
 echo "-> 推送内容 ..."
 git branch -M "$BRANCH"
 git remote remove origin 2>/dev/null || true
-git push -f "https://${USER_LOGIN}:${GITHUB_TOKEN}@github.com/${USER_LOGIN}/${REPO_NAME}.git" "${BRANCH}:${BRANCH}"
+if ! git -c credential.helper= \
+        -c credential.helper='!f() { printf "username=x-access-token\n"; printf "password=%s\n" "$GITHUB_TOKEN"; }; f' \
+        push --force --quiet "https://github.com/${USER_LOGIN}/${REPO_NAME}.git" "${BRANCH}:${BRANCH}" 2>&1; then
+  echo "X 推送失败（令牌不回显）"
+  exit 1
+fi
+echo "   推送完成"
 
 # 4) 开启 Pages（main 分支 / 根目录）
 echo "-> 开启 GitHub Pages ..."

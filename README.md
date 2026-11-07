@@ -1,9 +1,10 @@
 # SubMask 隐私政策 · GitHub Pages 源文件
 
-> 当前线上链接（2026-11-06 起）：`https://submask-privacy.app.workbuddy.host/?sharecode=43OK67UX5H`
-> （已通过 WorkBuddy 静态托管上线，无需 GitHub 账户。本目录保留为 GitHub Pages 备用源。）
+> ✅ **正式线上链接（2026-11-07 起）**：`https://1437499398a-collab.github.io/submask-privacy/`
+> 仓库：`github.com/1437499398a-collab/submask-privacy` · 已验证 HTTP 200
+> WorkBuddy 临时托管链接已下线，勿再使用。
 
-本目录用于把 SubMask 的隐私政策托管到 GitHub Pages，生成可供
+本目录是 GitHub Pages 的源仓库，生成可供
 **Google Play** 与 **国内应用商店（应用宝 / 华为 / 小米 / OPPO / vivo）**
 填写的隐私政策链接。
 
